@@ -45,6 +45,12 @@
                 if cramfs_non_compliant else
                 'COMPLIANT (module disabled and deny-listed)'
               }}
+
+        - name: Fail if cramfs is non-compliant
+          fail:
+            msg: "NON-COMPLIANT: cramfs module is loaded or not properly deny-listed in /etc/modprobe.d/*"
+          when: cramfs_non_compliant
+
       when: cramfs_modinfo.rc == 0
 
     ########################
@@ -56,10 +62,10 @@
         path: /etc/ssh/sshd_config
       register: sshd_config_stat
 
-    - name: Print result for /etc/ssh/sshd_config
-      debug:
-        msg: >-
-          /etc/ssh/sshd_config — {{
+    - name: Set result for /etc/ssh/sshd_config
+      set_fact:
+        sshd_config_compliant: >-
+          {{
             (
               (sshd_config_stat.stat.mode | int(base=8)) <= 0o600 and
               sshd_config_stat.stat.pw_name == 'root' and
@@ -67,3 +73,13 @@
             )
             | ternary('COMPLIANT', 'NON-COMPLIANT')
           }}
+
+    - name: Print compliance result for /etc/ssh/sshd_config
+      debug:
+        msg: "/etc/ssh/sshd_config — {{ sshd_config_compliant | ternary('COMPLIANT', 'NON-COMPLIANT') }}"
+
+
+    - name: Fail if non-compliant for /etc/ssh/sshd_config
+      fail:
+        msg: "/etc/ssh/sshd_config is NON-COMPLIANT."
+      when: not sshd_config_compliant
