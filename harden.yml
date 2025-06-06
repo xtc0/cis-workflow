@@ -6,9 +6,9 @@
 
   tasks:
 
-    #######################################
-    # Disable cramfs module #
-    #######################################
+    ########################
+    # Disable cramfs module
+    ########################
 
     - name: Create install deny rule for cramfs
       copy:
@@ -36,9 +36,9 @@
       debug:
         msg: "cramfs hardening applied"
 
-    #################################################
-    # Secure SSH config file permissions #
-    #################################################
+    #####################################
+    # Secure SSH config file permissions 
+    #####################################
 
     - name: Fix ownership and permissions for /etc/ssh/sshd_config
       file:

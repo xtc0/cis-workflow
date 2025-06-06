@@ -4,9 +4,9 @@
   gather_facts: no
   tasks:
 
-    #######################################
-    # Disable cramfs module #
-    #######################################
+    ########################
+    # Disable cramfs module 
+    ########################
 
     - name: Check if cramfs module is available
       command: modinfo cramfs
@@ -17,39 +17,39 @@
     - name: cramfs not available, considered compliant
       when: cramfs_modinfo.rc != 0
       debug:
-        msg: "[CIS 1.1.1.1] cramfs module not available — COMPLIANT"
+        msg: "cramfs module not available — COMPLIANT"
 
     - block:
-        - name: CIS 1.1.1.1 - Check if cramfs is loaded
+        - name: Check if cramfs is loaded
           command: lsmod
           register: cramfs_lsmod
           changed_when: false
 
-        - name: CIS 1.1.1.1 - Check modprobe.d for cramfs deny rules
+        - name: Check modprobe.d for cramfs deny rules
           shell: grep cramfs /etc/modprobe.d/* || true
           register: cramfs_config
           changed_when: false
 
-        - name: CIS 1.1.1.1 - Determine cramfs compliance
+        - name: Determine cramfs compliance
           set_fact:
             cramfs_non_compliant: >-
               {{ 'cramfs' in cramfs_lsmod.stdout or
                  'install cramfs /bin/false' not in cramfs_config.stdout or
                  'blacklist cramfs' not in cramfs_config.stdout }}
 
-        - name: CIS 1.1.1.1 - Print cramfs compliance result
+        - name: Print cramfs compliance result
           debug:
             msg: >-
-              [CIS 1.1.1.1] cramfs is {{
+              cramfs is {{
                 'NON-COMPLIANT (module loaded or not properly deny-listed)'
                 if cramfs_non_compliant else
                 'COMPLIANT (module disabled and deny-listed)'
               }}
       when: cramfs_modinfo.rc == 0
 
-    #######################################
-    # SSH config file check #
-    #######################################
+    ########################
+    # SSH config file check 
+    ########################
 
     - name: Check /etc/ssh/sshd_config permissions
       stat:
@@ -59,7 +59,7 @@
     - name: Print result for /etc/ssh/sshd_config
       debug:
         msg: >-
-          [CIS 5.1.1] /etc/ssh/sshd_config — {{
+          /etc/ssh/sshd_config — {{
             (
               (sshd_config_stat.stat.mode | int(base=8)) <= 0o600 and
               sshd_config_stat.stat.pw_name == 'root' and
