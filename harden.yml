@@ -1,0 +1,70 @@
+---
+- name: Harden by removing cramfs and configuring /etc/ssh/sshd_config
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  tasks:
+
+    #######################################
+    # Disable cramfs module #
+    #######################################
+
+    - name: Create install deny rule for cramfs
+      copy:
+        dest: /etc/modprobe.d/cramfs_install.conf
+        content: "install cramfs /bin/false\n"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Create blacklist entry for cramfs
+      copy:
+        dest: /etc/modprobe.d/cramfs_blacklist.conf
+        content: "blacklist cramfs\n"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Remove cramfs module from kernel if loaded
+      shell: |
+        modprobe -r cramfs 2>/dev/null || true
+        rmmod cramfs 2>/dev/null || true
+      changed_when: false
+
+    - name: Print hardening result for cramfs
+      debug:
+        msg: "cramfs hardening applied"
+
+    #################################################
+    # Secure SSH config file permissions #
+    #################################################
+
+    - name: Fix ownership and permissions for /etc/ssh/sshd_config
+      file:
+        path: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Get list of .conf files in /etc/ssh/sshd_config.d
+      find:
+        paths: /etc/ssh/sshd_config.d
+        patterns: '*.conf'
+        file_type: file
+      register: sshd_conf_files
+      ignore_errors: true
+
+    - name: Fix ownership and permissions for sshd_config.d/*.conf
+      file:
+        path: "{{ item.path }}"
+        owner: root
+        group: root
+        mode: '0600'
+      loop: "{{ sshd_conf_files.files | default([]) }}"
+      when: sshd_conf_files.matched | default(0) > 0
+
+    - name: Print hardening result for sshd_config
+      debug:
+        msg: "sshd_config and *.conf files hardened"
+
