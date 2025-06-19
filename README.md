@@ -43,9 +43,9 @@ This AAP workflow:
    - Ensure permissions on `/etc/ssh/sshd_config` are configured correctly
 
 ## Testing Non-Compliance For Cramfs (cramfs kernel module is now available)
-<pre> ```bash # Remove deny rules and blacklist sudo rm -f /etc/modprobe.d/cramfs_install.conf sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf ``` ```bash # Load the cramfs module sudo modprobe cramfs ``` ```bash # Confirm it's loaded (optional) lsmod | grep cramfs ``` </pre>
+<pre> ```# Remove deny rules and blacklist sudo rm -f /etc/modprobe.d/cramfs_install.conf sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf ``` </pre> <pre> ```# Load the cramfs module sudo modprobe cramfs ``` </pre> <pre> ```# Confirm it's loaded (optional) lsmod | grep cramfs ``` </pre>
 
 ## Testing Non-Compliance For /etc/ssh/sshd_config
-<pre> ```bash # Change permissions to less restrictive sudo chmod 0644 /etc/ssh/sshd_config ``` </pre>
+<pre> ```# Change permissions to less restrictive sudo chmod 0644 /etc/ssh/sshd_config ``` </pre>
 
 
