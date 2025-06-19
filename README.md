@@ -1,9 +1,9 @@
 
-Task: Create an AAP workflow with approval - use case: 2 CIS hardening rules (RHEL9)
+# Task: Create an AAP workflow with approval - use case: 2 CIS hardening rules (RHEL9)
 
-Rule 1: Ensure cramfs kernel module is not available
+## Rule 1: Ensure cramfs kernel module is not available
 
-Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
+## Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
 
 
 Process for cramfs:
@@ -30,4 +30,33 @@ Process for sshd_config:
 
 < Harden >
 - Run the following script to set ownership and permissions on /etc/ssh/sshd_config and files ending in .conf in the /etc/ssh/sshd_config.d directory
+  
+
+## Example use case: CIS Workflow with Approvals
+Security engineers want to ensure that RHEL 9 systems comply with key CIS benchmarks.  
+This AAP workflow:
+
+
+1. Runs a **scan playbook** to check for non-compliance.
+2. Runs a **harden playbook** to fix issues for:
+   - Ensure `cramfs` module is not available
+   - Ensure permissions on `/etc/ssh/sshd_config` are configured correctly
+
+## Testing Non-Compliance For Cramfs (cramfs kernel module is now available)
+`# Remove deny rules and blacklist
+sudo rm -f /etc/modprobe.d/cramfs_install.conf
+sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf
+`
+`# Load the cramfs module
+sudo modprobe cramfs
+`
+`# Confirm it's loaded (optional)
+lsmod | grep cramfs
+`
+
+## Testing Non-Compliance For /etc/ssh/sshd_config
+`# Change permissions to less restrictive
+sudo chmod 0644 /etc/ssh/sshd_config
+`
+
 
