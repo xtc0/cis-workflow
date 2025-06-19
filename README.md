@@ -46,6 +46,8 @@ This AAP workflow:
 <pre> ```# Remove deny rules and blacklist sudo rm -f /etc/modprobe.d/cramfs_install.conf sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf ``` </pre> <pre> ```# Load the cramfs module sudo modprobe cramfs ``` </pre> <pre> ```# Confirm it's loaded (optional) lsmod | grep cramfs ``` </pre>
 
 ## Testing Non-Compliance For /etc/ssh/sshd_config
-<pre> ```# Change permissions to less restrictive sudo chmod 0644 /etc/ssh/sshd_config ``` </pre>
+```bash
+# Change permissions to less restrictive
+sudo chmod 0644 /etc/ssh/sshd_config
 
 
