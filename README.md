@@ -6,7 +6,7 @@
 ## Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
 
 
-Process for cramfs:
+## Process for cramfs:
 
 < Scan >
 - If the cramfs kernel module is available in ANY installed kernel, verify:
@@ -20,7 +20,7 @@ Process for cramfs:
 - Run modprobe -r cramfs 2>/dev/null; rmmod cramfs 2>/dev/null to remove cramfs from the kernel
 
 
-Process for sshd_config:
+## Process for sshd_config:
 
 < Scan >
 - Run the following script and verify /etc/ssh/sshd_config and files ending in .conf in the /etc/ssh/sshd_config.d directory are:
@@ -54,10 +54,17 @@ sudo modprobe cramfs
 # Confirm it's loaded (optional)
 lsmod | grep cramfs
 ```
+After using these commands, cramfs would become available. By doing so, this would violate CIS rules and hence would trigger a failed task when running scan playbook (scan.yml).
 
 ## Testing Non-Compliance For /etc/ssh/sshd_config
 ```bash
 # Change permissions to less restrictive
 sudo chmod 0644 /etc/ssh/sshd_config
+```
 
+After using these commands, permissions for /etc/ssh/sshd_config would change and become non-compliant. This would violate CIS rules and hence would trigger a failed task when running scan playbook (scan.yml).
+
+## After configuring for Non-Compliance, Trigger harden.yml
+
+When non-compliance is picked up in scan.yml, certain tasks would fail for scan.yml. These tasks would then be corrected by harden playbook (harden.yml).
 
