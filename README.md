@@ -1,9 +1,9 @@
 
 # Task: Create an AAP workflow with approval - use case: 2 CIS hardening rules (RHEL9)
 
-## Rule 1: Ensure cramfs kernel module is not available
+### Rule 1: Ensure cramfs kernel module is not available
 
-## Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
+### Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
 
 
 Process for cramfs:
