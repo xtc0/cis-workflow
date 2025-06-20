@@ -3,7 +3,8 @@
 
 ### Rule 1: Ensure cramfs kernel module is not available
 
-## Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
+### Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
+
 
 
 Process for cramfs:
