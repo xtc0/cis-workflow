@@ -46,7 +46,7 @@ This AAP workflow:
 ```bash
 # Remove deny rules and blacklist
 sudo rm -f /etc/modprobe.d/cramfs_install.conf
-sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf ```
+sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf
 
 # Load the cramfs module
 sudo modprobe cramfs
