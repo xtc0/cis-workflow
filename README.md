@@ -44,15 +44,16 @@ This AAP workflow:
 
 ## Testing Non-Compliance For Cramfs (cramfs kernel module is now available)
 ```bash
-# Remove deny rules and blacklist sudo rm -f /etc/modprobe.d/cramfs_install.conf sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf ```
+# Remove deny rules and blacklist
+sudo rm -f /etc/modprobe.d/cramfs_install.conf
+sudo rm -f /etc/modprobe.d/cramfs_blacklist.conf ```
 
-```bash
 # Load the cramfs module
 sudo modprobe cramfs
 
-```bash
 # Confirm it's loaded (optional)
 lsmod | grep cramfs
+```
 
 ## Testing Non-Compliance For /etc/ssh/sshd_config
 ```bash
