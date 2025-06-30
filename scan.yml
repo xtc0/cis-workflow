@@ -20,7 +20,7 @@
         msg: "cramfs module not available — COMPLIANT"
 
     - block:
-        - name: Check if cramfs is loaded
+        - name: Check if cramfs is loaded # list all currently loaded kernel modules on the system, saves the output in the variable cramfs_lsmod, and marks the task as not having changed the system state.
           command: lsmod
           register: cramfs_lsmod
           changed_when: false
