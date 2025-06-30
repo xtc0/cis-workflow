@@ -33,9 +33,9 @@
         - name: Determine cramfs compliance
           set_fact:
             cramfs_non_compliant: >-
-              {{ 'cramfs' in cramfs_lsmod.stdout or
-                 'install cramfs /bin/false' not in cramfs_config.stdout or
-                 'blacklist cramfs' not in cramfs_config.stdout }}
+              {{ 'cramfs' in cramfs_lsmod.stdout or # checks if cramfs is loaded (making it non-compliant)
+                 'install cramfs /bin/false' not in cramfs_config.stdout or # checks if the deny rule is missing from the modprobe config files (making it non-compliant)
+                 'blacklist cramfs' not in cramfs_config.stdout }} # checks if deny-list line "blacklist cramfs" is missing from the modprobe config files (making it non-compliant)
 
         - name: Set cramfs compliance result
           debug:
@@ -51,7 +51,7 @@
             msg: "NON-COMPLIANT: cramfs module is loaded or not properly deny-listed in /etc/modprobe.d/*"
           when: cramfs_non_compliant
 
-      when: cramfs_modinfo.rc == 0
+      when: cramfs_modinfo.rc == 0 # go into block if cramfs is available (for further analysis)
 
     ########################
     # SSH config file check 
