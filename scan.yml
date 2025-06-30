@@ -30,12 +30,16 @@
           register: cramfs_config
           changed_when: false
 
+        # checks if cramfs is loaded (making it non-compliant)
+        # checks if the deny rule is missing from the modprobe config files (making it non-compliant)
+        # checks if deny-list line "blacklist cramfs" is missing from the modprobe config files (making it non-compliant)
+
         - name: Determine cramfs compliance
           set_fact:
             cramfs_non_compliant: >-
-              {{ 'cramfs' in cramfs_lsmod.stdout or # checks if cramfs is loaded (making it non-compliant)
-                 'install cramfs /bin/false' not in cramfs_config.stdout or # checks if the deny rule is missing from the modprobe config files (making it non-compliant)
-                 'blacklist cramfs' not in cramfs_config.stdout }} # checks if deny-list line "blacklist cramfs" is missing from the modprobe config files (making it non-compliant)
+              {{ 'cramfs' in cramfs_lsmod.stdout or
+                 'install cramfs /bin/false' not in cramfs_config.stdout or
+                 'blacklist cramfs' not in cramfs_config.stdout }}
 
         - name: Set cramfs compliance result
           debug:
