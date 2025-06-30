@@ -1,6 +1,8 @@
 
 # Task: Create an AAP workflow with approval - use case: 2 CIS hardening rules (RHEL9)
 
+To see list of CIS rules for RHEL 9, go to https://downloads.cisecurity.org/#/, under "Red Hat Enterprise Linux", select "Download PDF" for CIS Red Hat Enterprise Linux 9 Benchmark v2.0.0. Document called CIS_Red_Hat_Enterprise_Linux_9_Benchmark_v2.0.0.pdf will then be downloaded. This document containes the full list of CIS rules from which we will choose 2 to implement.
+
 ### Rule 1: Ensure cramfs kernel module is not available
 
 ### Rule 2: Ensure permissions on /etc/ssh/sshd_config are configured
