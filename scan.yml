@@ -25,7 +25,7 @@
           register: cramfs_lsmod
           changed_when: false
 
-        - name: Check modprobe.d for cramfs deny rules
+        - name: Check modprobe.d for cramfs deny rules # looks for any lines mentioning cramfs in modprobe configuration files. no change in task status, just collects info for cramfs_config variable
           shell: grep cramfs /etc/modprobe.d/* || true
           register: cramfs_config
           changed_when: false
