@@ -11,6 +11,7 @@
     ########################
 
     - name: Create install deny rule for cramfs
+      tags: cis_1_1_1_1
       copy:
         dest: /etc/modprobe.d/cramfs_install.conf
         content: "install cramfs /bin/false\n"
@@ -19,6 +20,7 @@
         mode: '0644'
 
     - name: Create blacklist entry for cramfs
+      tags: cis_1_1_1_1
       copy:
         dest: /etc/modprobe.d/cramfs_blacklist.conf
         content: "blacklist cramfs\n"
@@ -27,12 +29,14 @@
         mode: '0644'
 
     - name: Remove cramfs module from kernel if loaded
+      tags: cis_1_1_1_1
       shell: |
         modprobe -r cramfs 2>/dev/null || true
         rmmod cramfs 2>/dev/null || true
       changed_when: false
 
     - name: Print hardening result for cramfs
+      tags: cis_1_1_1_1
       debug:
         msg: "cramfs hardening applied"
 
@@ -41,6 +45,7 @@
     #####################################
 
     - name: Fix ownership and permissions for /etc/ssh/sshd_config
+      tags: cis_5_1_1
       file:
         path: /etc/ssh/sshd_config
         owner: root
@@ -48,6 +53,7 @@
         mode: '0600'
 
     - name: Get list of .conf files in /etc/ssh/sshd_config.d
+      tags: cis_5_1_1
       find:
         paths: /etc/ssh/sshd_config.d
         patterns: '*.conf'
@@ -56,6 +62,7 @@
       ignore_errors: true
 
     - name: Fix ownership and permissions for sshd_config.d/*.conf
+      tags: cis_5_1_1
       file:
         path: "{{ item.path }}"
         owner: root
@@ -65,6 +72,7 @@
       when: sshd_conf_files.matched | default(0) > 0
 
     - name: Print hardening result for sshd_config
+      tags: cis_5_1_1
       debug:
         msg: "sshd_config and *.conf files hardened"
 
