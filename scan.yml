@@ -9,23 +9,27 @@
     ########################
 
     - name: Check if cramfs module is available
+      tags: cis_1_1_1_1
       command: modinfo cramfs
       register: cramfs_modinfo
       ignore_errors: true
       changed_when: false
 
     - name: cramfs not available, considered compliant
+      tags: cis_1_1_1_1
       when: cramfs_modinfo.rc != 0
       debug:
         msg: "cramfs module not available — COMPLIANT"
 
     - block:
         - name: Check if cramfs is loaded # list all currently loaded kernel modules on the system, saves the output in the variable cramfs_lsmod, and marks the task as not having changed the system state.
+          tags: cis_1_1_1_1
           command: lsmod
           register: cramfs_lsmod
           changed_when: false
 
         - name: Check modprobe.d for cramfs deny rules # looks for any lines mentioning cramfs in modprobe configuration files. no change in task status, just collects info for cramfs_config variable
+          tags: cis_1_1_1_1
           shell: grep cramfs /etc/modprobe.d/* || true
           register: cramfs_config
           changed_when: false
@@ -35,6 +39,7 @@
         # checks if deny-list line "blacklist cramfs" is missing from the modprobe config files (making it non-compliant)
 
         - name: Determine cramfs compliance
+          tags: cis_1_1_1_1
           set_fact:
             cramfs_non_compliant: >-
               {{ 'cramfs' in cramfs_lsmod.stdout or
@@ -42,6 +47,7 @@
                  'blacklist cramfs' not in cramfs_config.stdout }}
 
         - name: Set cramfs compliance result
+          tags: cis_1_1_1_1
           debug:
             msg: >-
               cramfs is {{
@@ -51,6 +57,7 @@
               }}
 
         - name: Fail if cramfs is non-compliant
+          tags: cis_1_1_1_1
           fail:
             msg: "NON-COMPLIANT: cramfs module is loaded or not properly deny-listed in /etc/modprobe.d/*"
           when: cramfs_non_compliant
@@ -62,12 +69,14 @@
     ########################
 
     - name: Check /etc/ssh/sshd_config permissions
+      tags: cis_5_1_1
       stat:
         path: /etc/ssh/sshd_config
       register: sshd_config_stat
 
 
     - name: Print result for /etc/ssh/sshd_config
+      tags: cis_5_1_1
       debug:
         msg: >-
           /etc/ssh/sshd_config — {{
@@ -80,6 +89,7 @@
           }}
 
     - name: Fail if /etc/ssh/sshd_config is non-compliant
+      tags: cis_5_1_1
       fail:
         msg: "/etc/ssh/sshd_config is NON-COMPLIANT: must be owned by root, group root, and mode 0600 or stricter."
       when: not (
